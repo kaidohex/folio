@@ -32,8 +32,8 @@ jobs:
         shell: pwsh
         run: |
           New-Item dist -ItemType Directory -Force
-          $ver = "${env:GITHUB_REF_NAME}"
-          Copy-Item target/release/folio.exe "dist/Marginalia-v$ver-windows-x64.exe"
+          $ver = ("${env:GITHUB_REF_NAME}") -replace '^v', ''
+          Copy-Item target/release/folio.exe "dist/Folio-v$ver-windows-x64.exe"
           Get-ChildItem dist
       - uses: actions/upload-artifact@v4
         with:
