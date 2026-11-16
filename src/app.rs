@@ -163,10 +163,10 @@ impl App {
     fn poll(&mut self, ctx: &egui::Context) {
         if self.fetching {
             let mut result = None;
-            if let Some(rx) = &self.fetch_rx {
-                if let Ok(r) = rx.try_recv() {
-                    result = Some(r);
-                }
+            if let Some(rx) = &self.fetch_rx
+                && let Ok(r) = rx.try_recv()
+            {
+                result = Some(r);
             }
             if let Some(r) = result {
                 self.fetching = false;
@@ -186,21 +186,21 @@ impl App {
                 ctx.request_repaint_after(Duration::from_millis(200));
             }
         }
-        if let Some(rx) = &self.update_rx {
-            if let Ok(res) = rx.try_recv() {
-                self.update_status = match res {
-                    Ok(latest) => {
-                        if latest == version() {
-                            UpdateStatus::UpToDate
-                        } else {
-                            UpdateStatus::New(latest)
-                        }
+        if let Some(rx) = &self.update_rx
+            && let Ok(res) = rx.try_recv()
+        {
+            self.update_status = match res {
+                Ok(latest) => {
+                    if latest == version() {
+                        UpdateStatus::UpToDate
+                    } else {
+                        UpdateStatus::New(latest)
                     }
-                    Err(e) => UpdateStatus::Failed(e),
-                };
-                self.update_rx = None;
-                ctx.request_repaint();
-            }
+                }
+                Err(e) => UpdateStatus::Failed(e),
+            };
+            self.update_rx = None;
+            ctx.request_repaint();
         }
     }
 
@@ -525,11 +525,11 @@ impl App {
         ui.add_space(4.0);
 
         ui.horizontal(|ui| {
-            if ui.button("⭳ Import OPML / backup").clicked() {
-                if let Some(count) = import_opml_file(&self.store) {
-                    self.toast(format!("Imported — {count} new feed(s)"));
-                    self.start_refresh();
-                }
+            if ui.button("⭳ Import OPML / backup").clicked()
+                && let Some(count) = import_opml_file(&self.store)
+            {
+                self.toast(format!("Imported — {count} new feed(s)"));
+                self.start_refresh();
             }
             if ui.button("⭱ Export OPML").clicked() {
                 match export_opml(&self.store) {

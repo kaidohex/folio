@@ -125,13 +125,17 @@ fn build_opml(feeds: Vec<Feed>) -> String {
     }
     let mut doc = opml::OPML::default();
     for (category, items) in by_category {
-        let mut folder = opml::Outline::default();
-        folder.text = category.clone();
+        let mut folder = opml::Outline {
+            text: category.clone(),
+            ..opml::Outline::default()
+        };
         for (title, url) in items {
-            let mut o = opml::Outline::default();
-            o.text = title.clone();
-            o.xml_url = Some(url.clone());
-            o.r#type = Some("rss".into());
+            let o = opml::Outline {
+                text: title.clone(),
+                xml_url: Some(url.clone()),
+                r#type: Some("rss".into()),
+                ..opml::Outline::default()
+            };
             folder.outlines.push(o);
         }
         doc.body.outlines.push(folder);

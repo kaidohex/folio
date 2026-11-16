@@ -151,12 +151,7 @@ impl Store {
         } else {
             stmt.query_map([], story_row).expect("stories map")
         };
-        let mut out = Vec::new();
-        for row in rows {
-            if let Ok(s) = row {
-                out.push(s);
-            }
-        }
+        let out: Vec<_> = rows.flatten().collect();
         out
     }
 

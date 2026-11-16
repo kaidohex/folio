@@ -202,7 +202,7 @@ fn new_story_from_entry(feed: &crate::model::Feed, entry: &feed_rs::model::Entry
     let excerpt = truncate(&clean_whitespace(&excerpt), 280);
     let published = entry
         .published
-        .or_else(|| entry.updated)
+        .or(entry.updated)
         .map(|d| d.timestamp_millis());
     NewStory {
         feed_id: feed.id,
